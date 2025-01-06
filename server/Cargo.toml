@@ -1,0 +1,16 @@
+[package]
+name = "server"
+version.workspace = true
+authors.workspace = true
+description.workspace = true
+documentation.workspace = true
+edition.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+commons = { path = "../commons" }
+actix-web = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }

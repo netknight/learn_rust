@@ -1,0 +1,27 @@
+@label=test
+
+### Healthcheck
+GET {{host}}/healthcheck
+
+### Get info
+GET {{host}}/api/v1/info
+
+### Echo simple HTTP request
+POST {{host}}/api/v1/echo
+
+{
+    "msg": "Hello, world!"
+}
+
+### Get data
+GET {{host}}/api/v1/data
+
+### Post data
+POST {{host}}/api/v1/data/test
+Content-Type: application/json
+
+{
+    "msg": "Hello, world!"
+}
+
+###

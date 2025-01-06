@@ -1,0 +1,13 @@
+[package]
+name = "commons"
+version.workspace = true
+authors.workspace = true
+description.workspace = true
+documentation.workspace = true
+edition.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+

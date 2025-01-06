@@ -1,0 +1,35 @@
+[workspace]
+
+members = [
+	"server",
+	"commons",
+]
+
+resolver = "2"
+
+[workspace.package]
+version = "0.0.1"
+authors = ["Jevgeni Goloborodko"]
+description = "Example WEB API"
+documentation = "https://example.com/bar"
+edition = "2021"
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+#missing_docs = "warn"
+unused_imports = "warn"
+unused_variables = "warn"
+dead_code = "warn"
+non_snake_case = "warn"
+non_camel_case_types = "warn"
+non_upper_case_globals = "warn"
+trivial_casts = "warn"
+trivial_numeric_casts = "warn"
+unused_extern_crates = "warn"
+unused_qualifications = "warn"
+unused_results = "warn"
+
+[workspace.dependencies]
+actix-web = "4"
+serde = { version = "1.0.217", features = ["derive"] }
+serde_json = "1.0.134"
