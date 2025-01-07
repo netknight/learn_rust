@@ -13,6 +13,8 @@ workspace = true
 commons = { path = "../commons" }
 actix-web = { workspace = true }
 actix-settings = { workspace = true}
+actix-service = { workspace = true }
+actix-http = { workspace = true }
 chrono = { workspace = true }
 dotenv = { workspace = true }
 env_logger = { workspace = true }

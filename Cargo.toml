@@ -30,11 +30,14 @@ unused_qualifications = "warn"
 unused_results = "warn"
 
 [workspace.dependencies]
-actix-settings = { version = "0.6.0" }
+actix-http = { version = "3.9.0" }
+actix-settings = { version = "0.8.0" }
+actix-service = { version = "2.0.2" }
 actix-web = {  version = "4.9.0" }
-chrono = { version = "0.4.22" }
+
+chrono = { version = "0.4.22", features = ["serde"] }
 dotenv = "0.15.0"
-env_logger = "0.10.0"
+env_logger = "0.11.6"
 log = "0.4"
 uuid = { version = "1", features = ["v4", "serde"] }
 #rand = "0.8.5"

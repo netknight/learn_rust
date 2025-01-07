@@ -2,7 +2,8 @@ mod server;
 mod users;
 
 use actix_settings::ApplySettings;
-use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
+use actix_web::{get, middleware, post, web, App, HttpResponse, HttpServer, Responder};
+use actix_web::middleware::Logger;
 use dotenv::dotenv;
 use crate::server::{logger, settings};
 use crate::server::handlers;
@@ -38,6 +39,8 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(move || {
         App::new()
+            .wrap(middleware::Compress::default())
+            .wrap(Logger::default())
             .app_data(state.clone())
             .service(
                 web::scope("/api")
@@ -55,7 +58,7 @@ async fn main() -> std::io::Result<()> {
             .route("/healthcheck", web::get().to(HttpResponse::Ok))
     })
         //.bind(("127.0.0.1", 8080))?
-        .apply_settings(&settings)
+        .try_apply_settings(&settings)?
         .run()
         .await
 }

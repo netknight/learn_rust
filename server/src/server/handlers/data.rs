@@ -7,12 +7,12 @@ struct DataPath {
     val: String
 }
 
-#[derive(Deserialize)]
+#[derive(Serialize, Deserialize)]
 struct DataRequest {
     msg: String
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 struct DataResponse {
     val: String,
     msg: String
@@ -48,3 +48,7 @@ async fn post_data(path: web::Path<DataPath>, req: web::Json<DataRequest>) -> ac
         msg: req.msg.clone()
     })
 }
+
+#[cfg(test)]
+mod tests;
+
