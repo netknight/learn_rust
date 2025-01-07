@@ -24,4 +24,17 @@ Content-Type: application/json
     "msg": "Hello, world!"
 }
 
+### Get users
+GET {{host}}/api/v1/users
+
+### Create user
+POST {{host}}/api/v1/users
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "test@test.com"
+}
+
+
 ###
