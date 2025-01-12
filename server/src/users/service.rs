@@ -1,6 +1,9 @@
+use std::backtrace::Backtrace;
 use chrono::Utc;
 use log::info;
+use commons::errors::ServiceError;
 use commons::service::{CrudService, ServiceResult};
+use commons::refined;
 use crate::users::domain::{User, UserEntity, UserId};
 
 pub trait UserService: CrudService<UserId, User, UserEntity> {
@@ -41,10 +44,11 @@ impl UserService for UserServiceImpl {
 }
 
 fn gen_user () -> ServiceResult<User> {
-    User::new(
-        "John Doe".to_string(),
-        "test@test.com".to_string()
-    ).map_err(|e| e.into())
+    let username = refined::Username::try_new("John Doe".to_string())
+            .map_err(|e|ServiceError::from_validation_error(e, Backtrace::capture()))?;
+    let _email = refined::Email::try_new("test@test.com".to_string())
+            .map_err(|e|ServiceError::from_validation_error(e, Backtrace::capture()))?;
+    Ok(User { name: username, email: _email })
 }
 
 fn gen_entity () -> ServiceResult<UserEntity> {

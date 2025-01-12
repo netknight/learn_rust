@@ -1,15 +1,22 @@
-use std::fmt;
 
-#[derive(Debug, Clone)]
-pub struct ValidationError {
-    pub field: String,
-    pub message: String,
+use thiserror::Error;
+use log::error;
+
+#[derive(Error, Debug)]
+pub enum ServiceError {
+    #[error("Constraint violation: `{0}`")]
+    ConstraintViolation(
+        String,
+        #[source] Box<dyn std::error::Error>,
+        //std::backtrace::Backtrace
+    ),
+    #[error("Persistence error: `{0}`")]
+    PersistenceError(String)
 }
 
-impl fmt::Display for ValidationError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}: {}", self.field, self.message)
+impl ServiceError {
+    pub fn from_validation_error<E: std::error::Error + 'static>(e: E, backtrace: std::backtrace::Backtrace) -> Self {
+        error!("{} {:?}", e.to_string(), backtrace);
+        ServiceError::ConstraintViolation(e.to_string(), Box::new(e))
     }
 }
-
-impl std::error::Error for ValidationError {}

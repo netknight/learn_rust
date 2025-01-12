@@ -10,5 +10,14 @@ edition.workspace = true
 workspace = true
 
 [dependencies]
+async-trait = { workspace = true }
 chrono = { workspace = true }
+derive_more = { workspace = true }
 serde = { workspace = true }
+nutype = { workspace = true }
+regex = { workspace = true }
+thiserror = { workspace = true }
+log = "0.4.22"
+
+[dev-dependencies]
+fakeit = { workspace = true }

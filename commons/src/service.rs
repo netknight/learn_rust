@@ -1,8 +1,10 @@
-use crate::entity::Entity;
+use crate::entity::WithId;
+use crate::errors::ServiceError;
 
-pub type ServiceResult<T> = Result<T, Box<dyn std::error::Error>>;
+pub type ServiceResult<T> = Result<T, ServiceError>;
 
-pub trait CrudService<ID, DATA, ENTITY: Entity<ID>> {
+//#[async_trait]
+pub trait CrudService<ID, DATA, ENTITY: WithId<ID>> {
     fn create(&self, data: DATA) -> ServiceResult<ENTITY>;
     fn read(&self, id: ID) -> ServiceResult<ENTITY>;
     fn update(&self, id: ID, data: DATA) -> ServiceResult<ENTITY>;
