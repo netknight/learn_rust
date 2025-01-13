@@ -15,10 +15,12 @@ actix-web = { workspace = true }
 actix-settings = { workspace = true}
 actix-service = { workspace = true }
 actix-http = { workspace = true }
+apistos = { workspace = true }
 chrono = { workspace = true }
 dotenv = { workspace = true }
 env_logger = { workspace = true }
 log = { workspace = true }
 uuid = { workspace = true}
+schemars = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }

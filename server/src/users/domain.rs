@@ -32,7 +32,7 @@ impl User {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, serde::Deserialize, serde::Serialize)]
+#[derive(Debug, Clone, PartialEq, Eq, serde::Deserialize, serde::Serialize, schemars::JsonSchema, apistos::ApiComponent)]
 pub struct UserId(Uuid);
 
 impl UserId {

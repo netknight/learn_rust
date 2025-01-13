@@ -1,9 +1,10 @@
-use actix_web::{get, post, web, HttpResponse};
+use apistos::ApiComponent;
 use chrono::{DateTime, Utc};
-use crate::server::state::AppState;
+use schemars::JsonSchema;
+use serde::{Deserialize, Serialize};
 use crate::users::domain::{User, UserEntity, UserId};
 
-#[derive(Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Debug, Deserialize, Serialize, JsonSchema, ApiComponent)]
 pub struct UserData {
     pub name: String,
     pub email: String
@@ -24,7 +25,7 @@ impl Into<User> for UserData {
     }
 }
 
-#[derive(Debug, serde::Deserialize, serde::Serialize)]
+#[derive(Debug, Deserialize, Serialize, JsonSchema, ApiComponent)]
 pub struct UserResponse {
     pub id: UserId,
     pub name: String,
@@ -45,19 +46,21 @@ impl From<UserEntity> for UserResponse {
     }
 }
 
-#[post("/users")]
-async fn create_user(state: web::Data<AppState>, req: web::Json<UserData>) -> actix_web::Result<HttpResponse> {
-    let user_service = &state.user_service;
-    let user = req.into_inner().into();
-    let result = user_service.create(user)?/*.await?*/;
-    Ok(HttpResponse::Created().json(UserResponse::from(result)))
+#[derive(Debug, Deserialize, Serialize, JsonSchema, ApiComponent)]
+pub struct UsersResponse {
+    users: Vec<UserResponse>
 }
 
-#[get("/users")]
-async fn get_users(state: web::Data<AppState>) -> actix_web::Result<HttpResponse> {
-    let user_service = &state.user_service;
-    let users = user_service.list()?/*.await?*/;
-    let response: Vec<UserResponse> = users.into_iter().map(UserResponse::from).collect();
+impl UsersResponse {
+    pub fn new(users: Vec<UserResponse>) -> Self {
+        Self { users }
+    }
+}
 
-    Ok(HttpResponse::Ok().json(response))
+impl From<Vec<UserEntity>> for UsersResponse {
+    fn from(entities: Vec<UserEntity>) -> Self {
+        Self {
+            users: entities.into_iter().map(UserResponse::from).collect()
+        }
+    }
 }

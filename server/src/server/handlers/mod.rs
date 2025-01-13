@@ -1,2 +1,2 @@
-pub mod users;
 pub mod data;
+pub mod users;
