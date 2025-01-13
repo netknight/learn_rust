@@ -2,6 +2,7 @@ use crate::api::result::ResponseResult;
 use crate::api::state::AppState;
 use crate::api::users::models::{UserData, UserResponse, UsersResponse};
 use actix_web::web;
+use apistos::actix::CreatedJson;
 use apistos::api_operation;
 use log::error;
 
@@ -11,7 +12,7 @@ use log::error;
 pub async fn create_user(
     state: web::Data<AppState>,
     req: web::Json<UserData>,
-) -> ResponseResult<web::Json<UserResponse>> {
+) -> ResponseResult<CreatedJson<UserResponse>> {
     let user_service = &state.user_service;
     req.into_inner()
         .try_into()
@@ -27,8 +28,8 @@ pub async fn create_user(
                     actix_web::error::ErrorInternalServerError(e)
                 })
         })
-        .map(|user| UserResponse::from(user))
-        .map(|response| web::Json(response))
+        .map(UserResponse::from)
+        .map(CreatedJson)
 }
 
 //#[get("/")]
@@ -48,6 +49,6 @@ pub async fn get_users(state: web::Data<AppState>) -> ResponseResult<web::Json<U
                 .map(UserResponse::from)
                 .collect::<Vec<UserResponse>>()
         })
-        .map(|users| UsersResponse::new(users))
-        .map(|response| web::Json(response))
+        .map(UsersResponse::new)
+        .map(web::Json)
 }

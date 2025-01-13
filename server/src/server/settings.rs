@@ -11,5 +11,5 @@ pub type Settings = BasicSettings<AppSettings>;
 
 pub fn load<P: AsRef<Path>>(path: P) -> Settings {
     let path_str = path.as_ref().display().to_string();
-    Settings::parse_toml(path).expect(&format!("Failed to load settings from {path_str}"))
+    Settings::parse_toml(path).unwrap_or_else(|_| panic!("Failed to load settings from {path_str}"))
 }

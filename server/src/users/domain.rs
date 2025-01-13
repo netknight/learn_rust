@@ -78,11 +78,11 @@ impl entity::WithDeleted for UserEntity {
     }
 }
 
-impl Into<User> for UserEntity {
-    fn into(self) -> User {
+impl From<UserEntity> for User {
+    fn from(value: UserEntity) -> Self {
         User {
-            name: self.name,
-            email: self.email,
+            name: value.name,
+            email: value.email,
         }
     }
 }
