@@ -1,7 +1,7 @@
 @label=test
 
 ### Healthcheck
-GET {{host}}/healthcheck
+GET {{host}}/api/healthcheck
 
 ### Get info
 GET {{host}}/api/v1/info
@@ -35,6 +35,9 @@ Content-Type: application/json
   "name": "John Doe",
   "email": "test@test.com"
 }
+
+### OpenAPI Specification
+GET {{host}}/openapi.json
 
 
 ###

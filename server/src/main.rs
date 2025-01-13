@@ -2,13 +2,14 @@ mod api;
 mod server;
 mod users;
 
-
 use actix_settings::ApplySettings;
-use actix_web::{middleware, web, App, HttpServer};
+use actix_web::{middleware, App, HttpServer};
 use actix_web::middleware::Logger;
+
+use apistos::app::OpenApiWrapper;
 use dotenv::dotenv;
 use crate::server::{logger, settings};
-use crate::server::state::AppState;
+use crate::api::state::AppState;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -16,27 +17,32 @@ async fn main() -> std::io::Result<()> {
     let settings = settings::load("config.toml");
     logger::configure(&settings);
 
-    let state = web::Data::new(AppState::new(settings.clone()));
+    let state = actix_web::web::Data::new(AppState::new(settings.clone()));
     log::info!("Initialisation completed.");
 
     HttpServer::new(move || {
+        let spec = apistos::spec::Spec {
+            info: apistos::info::Info {
+                title: "REST API documentation".to_string(),
+                description: Some(
+                    "This is an API documented using Apistos,\na wonderful new tool to document your actix API !".to_string(),
+                ),
+                ..Default::default()
+            },
+            servers: vec![apistos::server::Server {
+                url: "/api/v1".to_string(),
+                ..Default::default()
+            }],
+            ..Default::default()
+        };
+
         App::new()
+            .document(spec)
             .wrap(middleware::Compress::default())
             .wrap(Logger::default())
             .app_data(state.clone())
-            .service(
-                web::scope("/api")
-                    .guard(actix_web::guard::Host("localhost"))
-                    .service(
-                        web::scope("/v1")
-                            .service(api::data::routes::routes())
-                            .service(api::users::routes::routes())
-                            // This service doesn't specify any new routes,
-                            // must be last in the chain
-                            .service(api::other::routes::routes()) 
-                    )
-            )
-            .route("/healthcheck", web::get().to(actix_web::HttpResponse::Ok))
+            .service(api::routes::routes())
+            .build("/openapi.json")
     })
         //.bind(("127.0.0.1", 8080))?
         .try_apply_settings(&settings)?

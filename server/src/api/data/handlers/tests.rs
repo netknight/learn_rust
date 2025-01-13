@@ -5,8 +5,8 @@ use actix_web::dev::{HttpServiceFactory, ServiceResponse};
 use actix_web::http::StatusCode;
 use dotenv::dotenv;
 use crate::api::data::routes::routes;
+use crate::api::state::AppState;
 use crate::server::settings;
-use crate::server::state::AppState;
 
 use super::*;
 

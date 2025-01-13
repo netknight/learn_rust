@@ -1,12 +1,13 @@
 use actix_web::web;
+use apistos::api_operation;
 use log::error;
 use crate::api::result::ResponseResult;
+use crate::api::state::AppState;
 use crate::api::users::models::{UserData, UserResponse, UsersResponse};
-use crate::server::state::AppState;
-
 
 // TODO: must be Created method specified
 //#[post("/")]
+#[api_operation(tag = "users", summary = "Create user")]
 pub async fn create_user(state: web::Data<AppState>, req: web::Json<UserData>) -> ResponseResult<web::Json<UserResponse>> {
     let user_service = &state.user_service;
     req.into_inner().try_into()
@@ -27,6 +28,7 @@ pub async fn create_user(state: web::Data<AppState>, req: web::Json<UserData>) -
 }
 
 //#[get("/")]
+#[api_operation(tag = "users", summary = "Get users")]
 pub async fn get_users(state: web::Data<AppState>) -> ResponseResult<web::Json<UsersResponse>> {
     let user_service = &state.user_service;
 

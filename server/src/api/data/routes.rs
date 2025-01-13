@@ -1,5 +1,4 @@
-use actix_web::Scope;
-use actix_web::web::{get, post, scope};
+use apistos::web::{get, post, scope, Scope};
 use super::handlers;
 
 pub fn routes() -> Scope {
