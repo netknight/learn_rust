@@ -1,23 +1,23 @@
-use std::backtrace::Backtrace;
+use crate::users::domain::{User, UserEntity, UserId};
 use apistos::ApiComponent;
 use chrono::{DateTime, Utc};
-use schemars::JsonSchema;
-use serde::{Deserialize, Serialize};
 use commons::errors::ServiceError;
 use commons::refined;
-use crate::users::domain::{User, UserEntity, UserId};
+use schemars::JsonSchema;
+use serde::{Deserialize, Serialize};
+use std::backtrace::Backtrace;
 
 #[derive(Debug, Deserialize, Serialize, JsonSchema, ApiComponent)]
 pub struct UserData {
     pub name: String,
-    pub email: String
+    pub email: String,
 }
 
 impl From<User> for UserData {
     fn from(user: User) -> Self {
         Self {
             name: user.name.into_inner(),
-            email: user.email.into_inner()
+            email: user.email.into_inner(),
         }
     }
 }
@@ -28,13 +28,12 @@ impl TryInto<User> for UserData {
     fn try_into(self) -> Result<User, Self::Error> {
         Ok(User {
             name: refined::Username::try_new(self.name)
-                .map_err(|e|ServiceError::from_validation_error(e, Backtrace::capture()))?,
+                .map_err(|e| ServiceError::from_validation_error(e, Backtrace::capture()))?,
             email: refined::Email::try_new(self.email)
-                .map_err(|e|ServiceError::from_validation_error(e, Backtrace::capture()))?,
+                .map_err(|e| ServiceError::from_validation_error(e, Backtrace::capture()))?,
         })
     }
 }
-
 
 #[derive(Debug, Deserialize, Serialize, JsonSchema, ApiComponent)]
 pub struct UserResponse {
@@ -59,7 +58,7 @@ impl From<UserEntity> for UserResponse {
 
 #[derive(Debug, Deserialize, Serialize, JsonSchema, ApiComponent)]
 pub struct UsersResponse {
-    users: Vec<UserResponse>
+    users: Vec<UserResponse>,
 }
 
 impl UsersResponse {
@@ -71,7 +70,7 @@ impl UsersResponse {
 impl From<Vec<UserEntity>> for UsersResponse {
     fn from(entities: Vec<UserEntity>) -> Self {
         Self {
-            users: entities.into_iter().map(UserResponse::from).collect()
+            users: entities.into_iter().map(UserResponse::from).collect(),
         }
     }
 }

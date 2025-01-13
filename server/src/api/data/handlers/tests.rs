@@ -1,23 +1,26 @@
-use actix_http::Request;
-use actix_service::Service;
-use actix_web::{http::header::ContentType, test, App, Error};
-use actix_web::dev::{HttpServiceFactory, ServiceResponse};
-use actix_web::http::StatusCode;
-use dotenv::dotenv;
 use crate::api::data::routes::routes;
 use crate::api::state::AppState;
 use crate::server::settings;
+use actix_http::Request;
+use actix_service::Service;
+use actix_web::dev::{HttpServiceFactory, ServiceResponse};
+use actix_web::http::StatusCode;
+use actix_web::{http::header::ContentType, test, App, Error};
+use dotenv::dotenv;
 
 use super::*;
 
-pub async fn init(service_factory: impl HttpServiceFactory + 'static) -> impl Service<Request, Response = ServiceResponse, Error = Error> {
+pub async fn init(
+    service_factory: impl HttpServiceFactory + 'static,
+) -> impl Service<Request, Response = ServiceResponse, Error = Error> {
     let _ = dotenv().ok();
     let settings = settings::load("config.toml");
     test::init_service(
         App::new()
             .app_data(web::Data::new(AppState::new(settings.clone())))
-            .service(service_factory)
-    ).await
+            .service(service_factory),
+    )
+    .await
 }
 
 pub async fn read_body_data<T: for<'de> Deserialize<'de>>(resp: ServiceResponse) -> T {
@@ -29,7 +32,8 @@ pub async fn read_body_data<T: for<'de> Deserialize<'de>>(resp: ServiceResponse)
 async fn test_get_data() {
     let app = init(routes()).await;
 
-    let req = test::TestRequest::get().uri("/data")
+    let req = test::TestRequest::get()
+        .uri("/data")
         .insert_header(ContentType::json())
         .to_request();
 
@@ -45,9 +49,12 @@ async fn test_get_data() {
 async fn test_post_data() {
     let app = init(routes()).await;
 
-    let req = test::TestRequest::post().uri("/data/123")
+    let req = test::TestRequest::post()
+        .uri("/data/123")
         .insert_header(ContentType::json())
-        .set_json(&DataRequest { msg: "post_data".to_string() })
+        .set_json(&DataRequest {
+            msg: "post_data".to_string(),
+        })
         .to_request();
 
     let resp = test::call_service(&app, req).await;

@@ -3,13 +3,13 @@ mod server;
 mod users;
 
 use actix_settings::ApplySettings;
-use actix_web::{middleware, App, HttpServer};
 use actix_web::middleware::Logger;
+use actix_web::{middleware, App, HttpServer};
 
+use crate::api::state::AppState;
+use crate::server::{logger, settings};
 use apistos::app::OpenApiWrapper;
 use dotenv::dotenv;
-use crate::server::{logger, settings};
-use crate::api::state::AppState;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {

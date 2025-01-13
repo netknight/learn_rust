@@ -1,14 +1,22 @@
 use chrono::{DateTime, Utc};
+use commons::{entity, refined};
 use uuid::Uuid;
-use commons::{refined, entity};
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct User {
     pub name: refined::Username,
-    pub email: refined::Email
+    pub email: refined::Email,
 }
 
-#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize, schemars::JsonSchema, apistos::ApiComponent)]
+#[derive(
+    Debug,
+    Clone,
+    PartialEq,
+    serde::Deserialize,
+    serde::Serialize,
+    schemars::JsonSchema,
+    apistos::ApiComponent,
+)]
 pub struct UserId(Uuid);
 
 impl UserId {
@@ -17,14 +25,13 @@ impl UserId {
     }
 }
 
-
 pub struct UserEntity {
     pub id: UserId,
     pub name: refined::Username,
     pub email: refined::Email,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
-    pub deleted_at: Option<DateTime<Utc>>
+    pub deleted_at: Option<DateTime<Utc>>,
 }
 
 /*
@@ -42,7 +49,7 @@ impl UserEntity {
             email: user.email,
             created_at: Utc::now(),
             updated_at: Utc::now(),
-            deleted_at: None
+            deleted_at: None,
         }
     }
 }
@@ -75,8 +82,7 @@ impl Into<User> for UserEntity {
     fn into(self) -> User {
         User {
             name: self.name,
-            email: self.email
+            email: self.email,
         }
     }
 }
-

@@ -1,15 +1,15 @@
 pub(crate) mod handlers {
+    use crate::api::result::ResponseResult;
+    use crate::api::state::AppState;
     use actix_web::web;
     use apistos::actix::NoContent;
     use apistos::api_operation;
-    use crate::api::result::ResponseResult;
-    use crate::api::state::AppState;
 
     #[api_operation(tag = "system", summary = "Healthcheck")]
     pub async fn healthcheck() -> ResponseResult<NoContent> {
         Ok(NoContent)
     }
-    
+
     //#[get("/info")]
     #[api_operation(tag = "other", summary = "Get service info")]
     pub async fn get_info(state: web::Data<AppState>) -> ResponseResult<String> {
@@ -27,8 +27,8 @@ pub(crate) mod handlers {
 }
 
 pub(crate) mod routes {
-    use apistos::web::{get, post, scope, Scope};
     use super::handlers;
+    use apistos::web::{get, post, scope, Scope};
 
     pub fn routes() -> Scope {
         scope("")

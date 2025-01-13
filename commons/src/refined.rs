@@ -4,13 +4,13 @@ use nutype::nutype;
 #[nutype(
     sanitize(trim, lowercase),
     validate(not_empty, len_char_max = 20),
-    derive(Debug, PartialEq, Clone),
+    derive(Debug, PartialEq, Clone)
 )]
 pub struct Username(String);
 
 #[nutype(
     validate(regex = r"^[^@]+@[^@]+\.[^@]+$"),
-    derive(Debug, PartialEq, Clone),
+    derive(Debug, PartialEq, Clone)
 )]
 pub struct Email(String);
 
@@ -21,10 +21,7 @@ pub struct Email(String);
 )]
 pub struct PhoneNumber(String);
 
-#[nutype(
-    validate(greater = 0),
-    derive(Debug, PartialEq, Clone)
-)]
+#[nutype(validate(greater = 0), derive(Debug, PartialEq, Clone))]
 pub struct PositiveU64(u64);
 
 #[nutype(
@@ -107,5 +104,4 @@ mod tests {
         let future_date = Utc::now() + chrono::Duration::days(1);
         assert!(PastDate::try_new(future_date).is_err());
     }
-
 }

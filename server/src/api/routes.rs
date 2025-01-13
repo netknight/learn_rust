@@ -9,8 +9,10 @@ pub fn routes() -> Scope {
                 .service(super::users::routes::routes())
                 // This service doesn't specify any new routes,
                 // must be last in the chain
-                .service(super::other::routes::routes())
+                .service(super::other::routes::routes()),
         )
-        .route("/healthcheck", get().to(super::other::handlers::healthcheck)
-    )
+        .route(
+            "/healthcheck",
+            get().to(super::other::handlers::healthcheck),
+        )
 }

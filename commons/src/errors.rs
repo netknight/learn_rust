@@ -1,6 +1,5 @@
-
-use thiserror::Error;
 use log::error;
+use thiserror::Error;
 
 #[derive(Error, Debug)]
 pub enum ServiceError {
@@ -11,11 +10,14 @@ pub enum ServiceError {
         //std::backtrace::Backtrace
     ),
     #[error("Persistence error: `{0}`")]
-    PersistenceError(String)
+    PersistenceError(String),
 }
 
 impl ServiceError {
-    pub fn from_validation_error<E: std::error::Error + 'static>(e: E, backtrace: std::backtrace::Backtrace) -> Self {
+    pub fn from_validation_error<E: std::error::Error + 'static>(
+        e: E,
+        backtrace: std::backtrace::Backtrace,
+    ) -> Self {
         error!("{} {:?}", e.to_string(), backtrace);
         ServiceError::ConstraintViolation(e.to_string(), Box::new(e))
     }

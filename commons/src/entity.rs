@@ -60,5 +60,4 @@ macro_rules! derive_with_deleted {
     };
 }
 
-
-pub use {derive_with_id, derive_with_created, derive_with_updated, derive_with_deleted};
+pub use {derive_with_created, derive_with_deleted, derive_with_id, derive_with_updated};

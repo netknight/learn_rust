@@ -1,6 +1,6 @@
-use std::sync::Mutex;
 use crate::server::settings::Settings;
 use crate::users::service::{UserService, UserServiceImpl};
+use std::sync::Mutex;
 
 pub struct AppState {
     pub requests: Mutex<i32>,

@@ -1,5 +1,5 @@
-use apistos::web::{get, post, scope, Scope};
 use super::handlers;
+use apistos::web::{get, post, scope, Scope};
 
 pub fn routes() -> Scope {
     scope("/data")

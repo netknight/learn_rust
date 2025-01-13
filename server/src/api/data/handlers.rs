@@ -1,24 +1,24 @@
-use actix_web::{web, HttpRequest, HttpResponse, Responder};
+use crate::api::result::ResponseResult;
 use actix_web::http::header::ContentType;
+use actix_web::{web, HttpRequest, HttpResponse, Responder};
 use apistos::{api_operation, ApiComponent};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
-use crate::api::result::ResponseResult;
 
 #[derive(Deserialize, JsonSchema, ApiComponent)]
 pub struct DataPath {
-    val: String
+    val: String,
 }
 
 #[derive(Serialize, Deserialize, JsonSchema, ApiComponent)]
 pub struct DataRequest {
-    msg: String
+    msg: String,
 }
 
 #[derive(Serialize, Deserialize, JsonSchema, ApiComponent)]
 pub struct DataResponse {
     val: String,
-    msg: String
+    msg: String,
 }
 
 impl Responder for DataResponse {
@@ -32,7 +32,6 @@ impl Responder for DataResponse {
             .content_type(ContentType::json())
             .body(body)
     }
-
 }
 
 //#[get("/data")]
@@ -40,20 +39,22 @@ impl Responder for DataResponse {
 pub async fn get_data() -> ResponseResult<web::Json<DataResponse>> {
     let body = DataResponse {
         val: "get_data".to_string(),
-        msg: "get_data".to_string()
+        msg: "get_data".to_string(),
     };
     Ok(web::Json(body))
 }
 
 //#[post("/data/{val}")]
 #[api_operation(tag = "data", summary = "Post data")]
-pub async fn post_data(path: web::Path<DataPath>, req: web::Json<DataRequest>) -> ResponseResult<DataResponse> {
+pub async fn post_data(
+    path: web::Path<DataPath>,
+    req: web::Json<DataRequest>,
+) -> ResponseResult<DataResponse> {
     Ok(DataResponse {
         val: path.val.clone(),
-        msg: req.msg.clone()
+        msg: req.msg.clone(),
     })
 }
 
 #[cfg(test)]
 mod tests;
-
