@@ -4,7 +4,7 @@ use actix_web::{http::header::ContentType, test, App, Error};
 use actix_web::dev::{HttpServiceFactory, ServiceResponse};
 use actix_web::http::StatusCode;
 use dotenv::dotenv;
-
+use crate::api::data::routes::routes;
 use crate::server::settings;
 use crate::server::state::AppState;
 
@@ -27,7 +27,7 @@ pub async fn read_body_data<T: for<'de> Deserialize<'de>>(resp: ServiceResponse)
 
 #[actix_web::test]
 async fn test_get_data() {
-    let app = init(get_data).await;
+    let app = init(routes()).await;
 
     let req = test::TestRequest::get().uri("/data")
         .insert_header(ContentType::json())
@@ -43,7 +43,7 @@ async fn test_get_data() {
 
 #[actix_web::test]
 async fn test_post_data() {
-    let app = init(post_data).await;
+    let app = init(routes()).await;
 
     let req = test::TestRequest::post().uri("/data/123")
         .insert_header(ContentType::json())

@@ -8,7 +8,7 @@ pub struct User {
     pub email: refined::Email
 }
 
-#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize, schemars::JsonSchema, apistos::ApiComponent)]
 pub struct UserId(Uuid);
 
 impl UserId {

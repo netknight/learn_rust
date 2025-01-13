@@ -3,17 +3,17 @@ use actix_web::http::header::ContentType;
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize)]
-struct DataPath {
+pub struct DataPath {
     val: String
 }
 
 #[derive(Serialize, Deserialize)]
-struct DataRequest {
+pub struct DataRequest {
     msg: String
 }
 
 #[derive(Serialize, Deserialize)]
-struct DataResponse {
+pub struct DataResponse {
     val: String,
     msg: String
 }
@@ -32,8 +32,8 @@ impl Responder for DataResponse {
 
 }
 
-#[get("/data")]
-async fn get_data() -> actix_web::Result<web::Json<DataResponse>> {
+//#[get("/data")]
+pub async fn get_data() -> actix_web::Result<web::Json<DataResponse>> {
     let body = DataResponse {
         val: "get_data".to_string(),
         msg: "get_data".to_string()
@@ -41,8 +41,8 @@ async fn get_data() -> actix_web::Result<web::Json<DataResponse>> {
     Ok(web::Json(body))
 }
 
-#[post("/data/{val}")]
-async fn post_data(path: web::Path<DataPath>, req: web::Json<DataRequest>) -> actix_web::Result<DataResponse> {
+//#[post("/data/{val}")]
+pub async fn post_data(path: web::Path<DataPath>, req: web::Json<DataRequest>) -> actix_web::Result<DataResponse> {
     Ok(DataResponse {
         val: path.val.clone(),
         msg: req.msg.clone()
