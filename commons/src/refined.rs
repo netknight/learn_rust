@@ -15,7 +15,7 @@ pub struct Username(String);
 pub struct Email(String);
 
 #[nutype(
-    sanitize(trim, with = |s| s.replace(&['(', ')', '-', ' '][..], "")),
+    sanitize(trim, with = |s| s.replace(&['(', ')', '-', ' ', '.'][..], "")),
     validate(regex = r"^\+?[0-9]*$"),
     derive(Debug, PartialEq, Clone),
 )]
@@ -41,6 +41,17 @@ mod tests {
     use super::*;
     use chrono::Utc;
 
+    fn assert_phone_valid(phone: &str) {
+        let phone_number = PhoneNumber::try_new(phone);
+        assert!(phone_number.is_ok(), "Failed to validate phone: {}", phone);
+        
+    }
+    
+    fn assert_email_valid(email: &str) {
+        let email_address = Email::try_new(email);
+        assert!(email_address.is_ok(), "Failed to validate email: {}", email);
+    }
+    
     #[test]
     fn test_username_sanitization() {
         let username = Username::try_new("  ExampleUser  ").unwrap();
@@ -57,8 +68,8 @@ mod tests {
 
     #[test]
     fn test_email_validation() {
-        assert!(Email::try_new("test@test.com").is_ok());
-        assert!(Email::try_new(&fakeit::contact::email()).is_ok());
+        assert_email_valid("test@test.com");
+        assert_email_valid(&fakeit::contact::email());
         assert!(Email::try_new("").is_err());
         assert!(Email::try_new("test@").is_err());
         assert!(Email::try_new("@test.com").is_err());
@@ -74,10 +85,12 @@ mod tests {
 
     #[test]
     fn test_phone_number_validation() {
-        assert!(PhoneNumber::try_new("+1234567890").is_ok());
-        assert!(PhoneNumber::try_new("1234567890").is_ok());
-        assert!(PhoneNumber::try_new(&fakeit::contact::phone()).is_ok());
-        assert!(PhoneNumber::try_new(&fakeit::contact::phone_formatted()).is_ok());
+        assert_phone_valid("1234567890");
+        assert_phone_valid("+1234567890");
+        assert_phone_valid("123-456-7890");
+        assert_phone_valid("123.456.7890");
+        assert_phone_valid(&fakeit::contact::phone());
+        assert_phone_valid(&fakeit::contact::phone_formatted());
         assert!(PhoneNumber::try_new("invalid_phone_number").is_err());
     }
 
